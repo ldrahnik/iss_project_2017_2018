@@ -1,0 +1,137 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+\usepackage[left=2cm,top=3cm,text={17cm,24cm}]{geometry}
+\usepackage[dvips]{graphicx}
+\graphicspath{ {images/} }
+\usepackage{listings}
+\usepackage{url}
+
+
+\begin{document}
+
+\begin{center}
+\textsc{\Huge Fakulta informačních technologií\\
+Vysoké učení technické v~Brně\\}
+
+\LARGE \title{Systémy a signály (ISS)\\}
+\textbf{ISS Projekt 2017 / 18\\}
+
+\hfill \author{Drahník Lukáš - xdrahn00 - xdrahn00@stud.fit.vutbr.cz}
+\end{center}
+
+{\let\newpage\relax\maketitle}
+
+\newpage
+
+\section*{Obsah}
+\begin{itemize}
+  \item Úvod
+  \item Otázka č.1
+  \item Otázka č.2
+  \item Otázka č.3
+  \item Otázka č.4
+  \item Otázka č.5
+  \item Otázka č.6
+  \item Otázka č.7
+  \item Otázka č.8
+  \item Otázka č.9
+  \item Otázka č.10
+  \item Otázka č.11
+  \item Otázka č.12
+  \item Otázka č.13
+\end{itemize}
+
+\newpage
+
+\section{Úvod}
+Projekt je vypracovaný za pomoci programu GNU Octave [1], verze 4.0.0, program je distribuován zdarma a programu Matlab, verze R2015B, který je dostupný online na serveru merlin.fit.vutbr.cz.
+
+\newpage
+
+\section{Otázka č.1}
+
+Délka ve vzorcích: 16000 vzorků\\
+Vzorkovací frekvence: 1 Hz\\
+Délka v sekundách: 1 sekunda\\
+\newline
+Použitá funkce: \textbf{wavread}[2]\
+\newline
+\newline
+Použitý kód:
+\lstset{language=Octave}
+\begin{lstlisting}[frame=single,breaklines]
+  [sig, fs] = wavread('xdrahn00.wav', "size")
+  # sig =  16000
+  # fs =  1
+  length(sig)/fs
+  # ans =  1
+\end{lstlisting}
+
+\section{Otázka č.2}
+
+Použitá funkce: \textbf{vyber}
+\newline
+\newline
+Použitý kód:
+\lstset{language=Octave}
+\begin{lstlisting}[frame=single,breaklines]
+  [s, Fs] = audioread ('xdrahn00.wav');
+  x = vyber(s, 0.5, 0.5, Fs);
+\end{lstlisting}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.6]{question-2}
+\end{figure}
+
+\section{Otázka č.3}
+
+Maximum modulu spektra: 126Hz (19.3915)\\
+\newline
+Použitá funkce: \textbf{vyber2}\
+\newline
+\newline
+Použitý kód:
+\lstset{language=Octave}
+\begin{lstlisting}[frame=single,breaklines]
+  [U, I] = max(G)
+  # I * Fs = 126
+\end{lstlisting}
+
+\section{Otázka č.4}
+
+Stabilita filtru: Nestabilní\\
+\newline
+Použitá funkce: \textbf{ukazmito}\
+\newline
+\newline
+Použitý kód:
+\lstset{language=Octave}
+\begin{lstlisting}[frame=single,breaklines]
+  [s, Fs] = audioread ('xdrahn00.wav');
+  A = [0.2289 0.4662];
+  B = [0.2324 -0.4112 0.2324];
+  ukazmito(A, B, Fs)
+\end{lstlisting}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.6]{question-4}
+\end{figure}
+
+\nocite{*}
+
+%% BIBLIOGRAPHY
+\bibliography{local}
+\bibliographystyle{plain}
+
+\newpage
+\thispagestyle{empty}
+
+%% IMAGES
+%% \listoffigures
+
+\end{document}
+%% END OF FILE
