@@ -6,6 +6,9 @@
 \usepackage[dvips]{graphicx}
 \graphicspath{ {images/} }
 \usepackage{listings}
+\usepackage{float}
+\floatstyle{boxed}
+\restylefloat{figure}
 \usepackage{url}
 
 
@@ -46,14 +49,14 @@ Vysoké učení technické v~Brně\\}
 \newpage
 
 \section{Úvod}
-Projekt je vypracovaný za pomoci programu GNU Octave [1], verze 4.0.0, program je distribuován zdarma a programu Matlab, verze R2015B, který je dostupný online na serveru merlin.fit.vutbr.cz.
+Projekt je vypracovaný za pomoci programu GNU Octave [1], verze 4.0.0, program je distribuován zdarma a programu Matlab, verze R2015B, který je dostupný online na fakultním serveru merlin.
 
 \newpage
 
 \section{Otázka č.1}
 
 Délka ve vzorcích: 16000 vzorků\\
-Vzorkovací frekvence: 1 Hz\\
+Vzorkovací frekvence: 16000 Hz\\
 Délka v sekundách: 1 sekunda\\
 \newline
 Použitá funkce: \textbf{wavread}[2]\
@@ -65,20 +68,23 @@ Použitý kód:
   [sig, fs] = wavread('xdrahn00.wav', "size")
   # sig =  16000
   # fs =  1
-  length(sig)/fs
-  # ans =  1
+  sig/fs
+  # ans =  16000
 \end{lstlisting}
 
 \section{Otázka č.2}
 
-Použitá funkce: \textbf{vyber}
+Použitá funkce: \textbf{fft}
 \newline
 \newline
 Použitý kód:
-\lstset{language=Octave}
+\lstset{language=Matlab}
 \begin{lstlisting}[frame=single,breaklines]
-  [s, Fs] = audioread ('xdrahn00.wav');
-  x = vyber(s, 0.5, 0.5, Fs);
+  [y,Fs] = audioread('xdrahn00.wav');
+  s = fft(y);
+  shalf = s(1:length(s)/2);
+  f =(0:Fs/2-1);
+  plot(f, abs(shalf));
 \end{lstlisting}
 
 \begin{figure}[h]
@@ -88,38 +94,199 @@ Použitý kód:
 
 \section{Otázka č.3}
 
-Maximum modulu spektra: 126Hz (19.3915)\\
+Maximum modulu spektra: 1.562466826653851e+03 (index 250)\\
 \newline
-Použitá funkce: \textbf{vyber2}\
+Použitá funkce: \textbf{max}\
 \newline
 \newline
 Použitý kód:
-\lstset{language=Octave}
+\lstset{language=Matlab}
 \begin{lstlisting}[frame=single,breaklines]
-  [U, I] = max(G)
-  # I * Fs = 126
+  [M, I] = max(abs(shalf));
+  # M = 1.562466826653851e+03
+  # I = 250
 \end{lstlisting}
 
 \section{Otázka č.4}
 
-Stabilita filtru: Nestabilní\\
+Aby byl filtr stabilní, musí být všechny póly uvnitř
+jednotkové kružnice.\\
+\newline
+Stabilita filtru: stabilní\\
 \newline
 Použitá funkce: \textbf{ukazmito}\
 \newline
 \newline
 Použitý kód:
-\lstset{language=Octave}
+\lstset{language=Matlab}
 \begin{lstlisting}[frame=single,breaklines]
   [s, Fs] = audioread ('xdrahn00.wav');
-  A = [0.2289 0.4662];
+  A = [1 0.2289 0.4662];
   B = [0.2324 -0.4112 0.2324];
-  ukazmito(A, B, Fs)
+  ukazmito(B, A, Fs)
+# stabilni...
 \end{lstlisting}
 
 \begin{figure}[h]
   \centering
   \includegraphics[scale=0.6]{question-4}
 \end{figure}
+
+\section{Otázka č.5}
+Horní propusť je frekvenční lineární filtr, který nepropouští signál o nízkých frekvencích.\\
+\newline
+Typ filtru: horní propust\\
+\newline
+
+Obrázek viz. Otázka č.4
+
+\section{Otázka č.6}
+
+Použitá funkce: \textbf{filter}
+\newline
+\newline
+Použitý kód:
+\lstset{language=Matlab}
+\begin{lstlisting}[frame=single,breaklines]
+  [s, Fs] = audioread ('xdrahn00.wav');
+  A = [1 0.2289 0.4662];
+  B = [0.2324 -0.4112 0.2324];
+  y = filter(B, A, s);
+  s = fft(y);
+  shalf = s(1:length(s)/2);
+  f =(0:Fs/2-1);
+  plot(f, abs(shalf));
+\end{lstlisting}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.6]{question-6}
+\end{figure}
+
+\section{Otázka č.7}
+
+Maximum modulu spektra filtrovaného signálu: 6.624258689332181e+02 (index 5868)\\
+\newline
+Použitá funkce: \textbf{max}\
+\newline
+\newline
+Použitý kód:
+\lstset{language=Matlab}
+\begin{lstlisting}[frame=single,breaklines]
+  [s, Fs] = audioread ('xdrahn00.wav');
+  A = [1 0.2289 0.4662];
+  B = [0.2324 -0.4112 0.2324];
+  y = filter(B, A, s);
+  s = fft(y);
+  shalf = s(1:length(s)/2);
+  f =(0:Fs/2-1);
+  plot(f, abs(shalf));
+
+  [M, I] = max(abs(shalf));
+  # M = 6.624258689332181e+02
+  # I = 5868
+\end{lstlisting}
+
+\section{Otázka č.8}
+
+Použitá funkce: \textbf{xcorr}\\
+\newline
+Ve vzorcích: 3757
+\newline
+V sekundách: 0.2348
+\newline
+
+\lstset{language=Matlab}
+\begin{lstlisting}[frame=single,breaklines]
+[s, Fs] = audioread('xdrahn00.wav', [1 16000]);
+
+sequence = [0.5 0.5 -0.5 -0.5];
+data = repmat(sequence, 1, 80);
+
+[result, lags] = xcorr(data, s);
+
+[~,I] = max(abs(acor));
+lagDiff = lag(I)
+timeDiff = lagDiff/Fs
+
+lagDiff =
+   -3757
+
+timeDiff =
+   -0.2348
+
+\end{lstlisting}
+
+\section{Otázka č.9}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.6]{question-9}
+\end{figure}
+
+Použitá funkce: \textbf{xcorr}
+\newline
+\newline
+Použitý kód:
+\lstset{language=Matlab}
+\begin{lstlisting}[frame=single,breaklines]
+  [s, Fs] = audioread('xdrahn00.wav', [1 16000]);
+
+  result = xcorr(s, 'biased');
+
+  N = 51;
+  k = (-Fs+1):(Fs-1);
+  start_index = find(k==-50);
+  end_index = find(k==50);
+  plot(k, result(start_index:end_index));
+
+  position = find(k==10);
+  value = result(position);
+\end{lstlisting}
+
+\section{Otázka č.10}
+
+Hodnota koeficientu R10: 0.0129 (viz. kód Otázka č. 9)\\
+
+\lstset{language=Matlab}
+\begin{lstlisting}[frame=single,breaklines]
+  position = find(k==10);
+  value = result(position);
+\end{lstlisting}
+
+\section{Otázka č.11}
+
+\lstset{language=Matlab}
+\begin{lstlisting}[frame=single,breaklines]
+  [s, Fs] = audioread('xdrahn00.wav', [1 16000]);
+
+  x = linspace(min(min(s)),max(max(s)), 50);
+  s1 = cat(1,s,zeros(10,1));
+  s2 = cat(1,zeros(10,1),s);
+  % nebo s1 = s; a s2 = circshift(s, 10);
+  [h, p, r] = hist2opt(s1, s2, x);
+  % r = 0.0129
+
+  imagesc(x,x,p); axis xy; c = jet; c = flipud(c); colormap(c); colorbar;
+\end{lstlisting}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.6]{question-11}
+\end{figure}
+
+\section{Otázka č.12}
+
+viz. otázka č. 11
+
+\lstset{language=Matlab}
+\begin{lstlisting}[frame=single,breaklines]
+  hist2: check -- 2d integral should be 1 and is 1
+\end{lstlisting}
+
+\section{Otázka č.13}
+
+Hodnota koeficientu R10: 0.0129 (viz. kód Otázka č. 11)\\
 
 \nocite{*}
 
