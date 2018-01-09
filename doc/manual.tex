@@ -65,11 +65,11 @@ Použitá funkce: \textbf{wavread}[2]\
 Použitý kód:
 \lstset{language=Octave}
 \begin{lstlisting}[frame=single,breaklines]
-  [sig, fs] = wavread('xdrahn00.wav', "size")
-  # sig =  16000
-  # fs =  1
-  sig/fs
-  # ans =  16000
+  [y, Fs] = wavread('xdrahn00.wav'));
+  size(y)
+  # 16000
+  Fs
+  # Fs = 16000
 \end{lstlisting}
 
 \section{Otázka č.2}
@@ -191,9 +191,9 @@ Použitý kód:
 
 Použitá funkce: \textbf{xcorr}\\
 \newline
-Ve vzorcích: 3757
+Ve vzorcích: 3759
 \newline
-V sekundách: 0.2348
+V sekundách: 0.2349
 \newline
 
 \lstset{language=Matlab}
@@ -205,15 +205,15 @@ data = repmat(sequence, 1, 80);
 
 [result, lags] = xcorr(data, s);
 
-[~,I] = max(abs(acor));
+[~,I] = max(result);
 lagDiff = lag(I)
 timeDiff = lagDiff/Fs
 
 lagDiff =
-   -3757
+   -3759
 
 timeDiff =
-   -0.2348
+   -0.2349
 
 \end{lstlisting}
 
