@@ -1,2 +1,2 @@
 # *Assessment 11/12* 
-(9. January 2018 - fixed assessment 12/12)
+(2. February 2018 - Assessment 12/12)
