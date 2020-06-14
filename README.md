@@ -1,2 +1,3 @@
-# *Assessment 11/12* 
-(2. February 2018 - Assessment 12/12)
+### Assessment 
+
+11/12b ([assessment report](https://github.com/ldrahnik/iss_1_project/issues/1))
